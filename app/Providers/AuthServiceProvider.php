@@ -17,11 +17,12 @@ class AuthServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
     ];
 
+    // Removed duplicate boot method
     public function boot(): void
     {
         $this->registerPolicies();
 
-        // Define gates
+        // Define gates for User
         Gate::define('view-dashboard', function (User $user) {
             return $user->isAdmin();
         });
@@ -30,9 +31,9 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isAdmin();
         });
 
-         // Add explicit gates for user management
-         Gate::define('update-users', function (User $user, User $targetUser) {
+        Gate::define('update-users', function (User $user, User $targetUser) {
             return $user->id === $targetUser->id || $user->isAdmin();
         });
+
     }
 }

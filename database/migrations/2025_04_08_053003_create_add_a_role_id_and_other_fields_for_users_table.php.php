@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             
-            $table->string('user_photo')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->foreignId('role_id')->constrained('roles');
 
         });
     }
@@ -29,7 +27,6 @@ return new class extends Migration
             $table->dropForeign(['role_id']);
             $table->dropColumn('role_id');
             $table->dropColumn('is_active');
-            $table->dropColumn('user_photo');
         });
     }
 };

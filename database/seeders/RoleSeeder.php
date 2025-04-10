@@ -20,21 +20,21 @@ class RoleSeeder extends Seeder
         ]);
 
         Role::create([
-            'name' => 'User',
-            'slug' => 'user',
-            'description' => 'Regular user with limited access',
+            'name' => 'Students',
+            'slug' => 'Students',
+            'description' => 'Student user with student-related access',
         ]);
 
         Role::create([
-            'name' => 'Staff',
-            'slug' => 'staff',
-            'description' => 'Regular staff member',
+            'name' => 'Jobsearcher',
+            'slug' => 'jobsearcher',
+            'description' => 'Jobsearcher user with job search-related access',
         ]);
 
         Role::create([
-            'name' => 'Customer',
-            'slug' => 'customer',
-            'description' => 'Customer user with customer-related access',
+            'name' => 'Advisors',
+            'slug' => 'advisors',
+            'description' => 'Advisors user with advisors-related access',
         ]);
     }
 }

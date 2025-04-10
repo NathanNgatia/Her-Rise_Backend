@@ -20,22 +20,15 @@ class AuthController extends Controller
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'password' => ['required', 'string', 'min:8', 'confirmed'],
-        'user_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        'role_id' => 'nullable|exists:roles,id', // Optional role_id for admin use
         // Remove role_id from public registration
     ]);
 
     $validated['password'] = Hash::make($validated['password']);
     
     // Assign a default role for new registrations
-    $validated['role_id'] = Role::where('name', 'customer')->first()->id; // or whatever default role
+   // $validated['role_id'] = Role::where('name', 'user')->first()->id; // or whatever default role
 
-    if ($request->hasFile('user_photo')) {
-        $filename = $request->file('user_photo')->store('users', 'public');
-    } else {
-        $filename = Null;
-    }
-
-    $validated['user_photo'] = $filename;
     
     $user = User::create($validated);
 
@@ -45,7 +38,8 @@ class AuthController extends Controller
     return response()->json([
         'message' => 'Registration successful',
         'user' => $user->load('role'),
-        'token' => $token
+        'token' => $token,
+        'abilities' => $user->abilities(),
     ], 201);
 }
 
@@ -84,13 +78,5 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logged out successfully']);
-    }
-
-    public function me(Request $request): JsonResponse
-    {
-        return response()->json([
-            'user' => $request->user()->load('role'),
-            'abilities' => $request->user()->abilities(),
-        ]);
     }
 }

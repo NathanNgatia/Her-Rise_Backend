@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('role_id')->nullable()->constrained('roles')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
@@ -36,6 +37,13 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+        Schema::create('role_id', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -46,5 +54,6 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
-    }
+        Schema::dropIfExists('role_id');
+    } 
 };
