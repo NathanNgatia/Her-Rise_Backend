@@ -16,25 +16,25 @@ class RoleSeeder extends Seeder
         Role::create([
             'name' => 'Administrator',
             'slug' => 'admin',
-            'description' => 'System administrator with full access',
+            'description' => 'System administrator with full access'
         ]);
 
         Role::create([
-            'name' => 'Students',
-            'slug' => 'Students',
-            'description' => 'Student user with student-related access',
+            'name' => 'Student',
+            'slug' => 'student',
+            'description' => 'Student user with student-related access'
         ]);
 
         Role::create([
             'name' => 'Jobsearcher',
             'slug' => 'jobsearcher',
-            'description' => 'Jobsearcher user with job search-related access',
+            'description' => 'Jobsearcher user with job search-related access'
         ]);
 
         Role::create([
-            'name' => 'Advisors',
-            'slug' => 'advisors',
-            'description' => 'Advisors user with advisors-related access',
+            'name' => 'Mentor',
+            'slug' => 'mentor',
+            'description' => 'Advisors user with advisors-related access'
         ]);
     }
 }

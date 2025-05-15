@@ -24,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
 
         // Define gates for User
         Gate::define('view-dashboard', function (User $user) {
-            return $user->isAdmin();
+            return $user->role();
         });
 
         Gate::define('manage-users', function (User $user) {

@@ -18,10 +18,10 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $adminRole = Role::where('slug', 'admin')->first();
-        $studentRole = Role::where('slug', 'Students')->first();
+        $studentRole = Role::where('slug', 'student')->first();
         $jobsearcherRole = Role::where('slug', 'jobsearcher')->first();
-        $advisorRole = Role::where('slug', 'advisors')->first();
-        if (!$adminRole || !$studentRole || !$jobsearcherRole || !$advisorRole) {
+        $mentorRole = Role::where('slug', 'mentor')->first();
+        if (!$adminRole || !$studentRole || !$jobsearcherRole || !$mentorRole) {
             throw new Exception('Roles not found');
         }
 
@@ -50,10 +50,10 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Advisor User',
-            'email' => 'advisor@example.com',
+            'name' => 'Mentor User',
+            'email' => 'mentor@example.com',
             'password' => Hash::make('password'),
-            'role_id' => $advisorRole->id,
+            'role_id' => $mentorRole->id,
             'email_verified_at' => now(),
         ]);
     }

@@ -20,14 +20,12 @@ class AuthController extends Controller
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'password' => ['required', 'string', 'min:8', 'confirmed'],
-        'role_id' => 'nullable|exists:roles,id', // Optional role_id for admin use
+        'role_id' => ['required','exists:roles,id'], // Optional role_id for admin use
         // Remove role_id from public registration
     ]);
 
     $validated['password'] = Hash::make($validated['password']);
     
-    // Assign a default role for new registrations
-   // $validated['role_id'] = Role::where('name', 'user')->first()->id; // or whatever default role
 
     
     $user = User::create($validated);
@@ -39,6 +37,7 @@ class AuthController extends Controller
         'message' => 'Registration successful',
         'user' => $user->load('role'),
         'token' => $token,
+        'role_id' => $request->role_id,
         'abilities' => $user->abilities(),
     ], 201);
 }
@@ -58,11 +57,11 @@ class AuthController extends Controller
             ]);
         }
 
-        if (! $user->is_active) {
-            throw ValidationException::withMessages([
-                'email' => ['This account is inactive.'],
-            ]);
-        }
+        // if (! $user->is_active) {
+        //     throw ValidationException::withMessages([
+        //         'email' => ['This account is inactive.'],
+        //     ]);
+        // }
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
@@ -80,3 +79,4 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 }
+

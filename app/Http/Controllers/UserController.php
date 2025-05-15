@@ -12,12 +12,12 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index(): JsonResponse
+    public function getUser(Request $request): JsonResponse
     {
         $this->authorize('viewAny', User::class);
         $user = User::find();
         echo $user->role->name; // This will output the name of the role associated with the user
-        return response()->json($user);
+        return response()->json($request->user());
     }
 
     public function store(Request $request): JsonResponse
@@ -53,9 +53,15 @@ class UserController extends Controller
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['sometimes', 'string', 'min:8'],
+            'user_photo' => ['nullable|image|MAX:2048'],
             'role_id' => ['sometimes', 'exists:roles,id'],
             'is_active' => ['sometimes', 'boolean'],
         ]);
+
+        if ($request->hasFile('user_photo')) {
+            $path = $request->file('user_photo')->store('profile_photos', 'public');
+            $user->user_photo = $path;
+        }
 
         if (isset($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
